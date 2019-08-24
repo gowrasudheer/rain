@@ -3,7 +3,7 @@ pipeline {
 	stages {
 	    stage('build') {
 		steps {
-			sh 'git --version'
+			sh 'mvn --version'
 			sh '''
 			    echo "multiline shell"
 			    ls -lah 
