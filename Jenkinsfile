@@ -8,6 +8,10 @@ pipeline {
 			    echo "multiline shell"
 			    ls -lah 
 			'''
+			stage('email')
+			stpes {
+			emailext body: '', subject: 'compiile', to: 'yarapakalyan@gmail.com'
+				}
 			}
 		}
 	}
