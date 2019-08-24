@@ -1,9 +1,9 @@
 pipeline {
-	agent any
+agent any
 stages {
-	stage('knowing version') {
-		step {
-		sh 'mvn --version'
+stage('build') {
+step {
+sh 'mvn --version'
 }
 }
 }
