@@ -3,7 +3,7 @@ pipeline {
 	stages {
 	    stage('build') {
 		steps {
-			sh 'echo "he"'
+			sh 'git -version'
 			sh '''
 			    echo "multiline shell"
 			    ls -lah 
