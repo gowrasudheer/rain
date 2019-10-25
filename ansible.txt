@@ -1,0 +1,281 @@
+ansible tutorial 
+
+1.ansible is a very powerfull open source automation tool
+2.ansible is configuration management tool
+3.ansible is agent less tool
+
+what is configuration management ?
+
+1.in simple term configuration means changing of "IT" infrastructures like OS, network devices , applications, softwares and cloud computing services are called as configuration management 
+
+why we need configuration tool ?
+
+1.configuration of IT infrastructure like software & OS changes happens then we have add update for doing the things when we doing such things its very time taking when doing hundread of servers
+
+some imp terminology 
+
+1.client server controller
+
+2.target server
+
+3.inventory file 
+
+4.ansible only uses ssh connections
+
+5.playbook It will contain all the instruction for configuration 
+
+6. ansible.cfg it contains configuration details 
+
+7. when u run any command any command in ansible will read ansible.cfg { path of inventory file }
+
+some configuration management tools 
+
+1. puppet
+
+2. chef
+
+3.saltstack
+
+notes:-
+
+1.where we installed ansible is called CONTROL MACHINE
+
+2.ansible is wriiten in python language
+
+3.we have to install python in controll machine 
+
+some importent terminlogy used in ansible :-
+-------------------------------------------
+
+1.INVENTORY FILE
+
+inventory is a text file where u define the host information that you want manage with 
+
+ansible the default inventory file location is /etc/ansible/hosts
+
+2. HOSTS AND GROUPS :-
+-----------------------
+
+A host file consists of host groups its contains server IP address 
+
+[webserver]
+192.168.1.13
+[dbserver]
+192.168.1.14
+
+in this above examples webserver and dbserver the given hosts :-
+--------------------------------------------------------------
+To know how many hosts present in the ansible we have to use following command 
+
+ansible --list-hosts all { it will print all the details about the ansible hosts details }
+
+ansible --list-hosts groupname {it will give the result about particular group details }
+
+
+Inventory for production system 
+-------------------------------
+
+1.ansible uses SSH its always do SSh key exchange and authorized ansible login to nodes 
+
+2.we can manage IP address with /etc/hosts file 
+
+
+example :-
+
+cat /etc/hosts
+
+192.168.1.13 web1
+
+192.168.1.14 db1
+
+Adhoc command :-
+-------------
+
+ansible give a quick method to communicate and execute commands on remote/local machines through Adhoc commands
+
+example:-
+--------
+
+ansible -i webserver -m ping 
+
+explanation :-
+-----------
+
+1.adhoc commands are executed by specify ansible command 
+
+2. -i < inventory name > its tell ansible to pick up host information ( if u want run particular host group we have to use -i on that )
+
+3. -m < module > ping is a module which will login to the hosts and check the connectivity
+
+Few more examples with adhoc command :--
+-------------------------------------
+
+
+
+SOLUTION :-
+-----------
+
+/etc/ansible/ansible.cfg file and uncomment 
+
+#host_key_checking=False
+
+we have to uncomment the 
+
+host_key_checking=false
+
+Group of Groups and Group variables:-
+------------------------------------
+variables can be applied an entier group 
+
+[webservers]
+web1
+[dbserver]
+db1
+
+[datacenter:children]
+webservers
+dataservers
+
+[datacenter:var]
+ansible_ssh_user=vagrant
+ansible_ssh_pass='vagrant'
+
+[datacenter:children] tells datacenter is a master group and underneath we specify other groupnmes
+
+[datacenter:var] is used to define variable at the group level you can specify variable on any group by specifying [groupname:vars]
+
+GENERAL FOR ALL CONNECTIONS
+---------------------------
+
+ansible_host:-
+
+the name of the hosts to connect to,if different from the alias you wish to give to it
+
+ansible_port:-
+
+the ssh port number,if not 22
+
+ansible_user
+
+the default ssh user name to use
+
+ansible_ssh_pass
+
+the ssh password use (never store this variable in plain text always use valut)
+
+ansible_ssh_private_key_file
+
+private key file used by ssh usefull using multiple keys and you dont to use SSH agent 
+
+
+ABOUT modules:-
+--------------
+
+Module ( also reffered as task plugin or library plugin ) 
+
+raw module {raw module is used when in target severs are not installed with python }
+
+example :-
+
+ansible IP -m raw -a 'echo hello' > /root/sample.txt
+----------------------------------------------------
+some more adhoc commands used in ansible { what is adhoc command ( if un want run immediate action on target servers we have to use adhoc commands )
+
+to check the files in target servers we have to use following this
+
+ ansible all -a " la -ltra /root/any file name "
+------------------------------------------------
+
+when we run any command in adhoc we are getting following result will be 
+
+172.17.0.3  |  changed |  rc =0 -- >>
+
+if get this result will sucessful 
+
+( when we get rc = 0 means u r command what we excuted is sucessful )
+---------------------------------------------------------------------
+
+( when we get rc = 1 means u r command what we excuted is not sucessful ) to know command will be echo $?
+
+to know targer server machine version and os kernal deatils ips we have to use the following command  { setup }
+
+ansible groupname -m setup ( we are getting all the system related information ) 
+---------------------------
+
+-a {{{ action }}}
+
+by using -a command we can find are search particular thing ip adress any thing u want )
+
+ansiible groupname -m setup -a ' fillter=*ipv4 '
+------------------------------------------------
+
+If u want get all the information about the server we have to use setup --tree
+
+ansible all -m setup --tree /root/directory name
+------------------------------------------------
+it will stroe target server details in in file modes in the given directory
+
+
+if u want use cat are any linux commands we have to use following adhoc command 
+
+ansible all -a "cat /root/sample.txt" :-
+ansible all -a "vim /root/sample.txt" :
+-------------------------------------
+
+copying file from controller to target server 
+
+in docker if u want copy any file scp sample.txt root@172.17.0.3:/root/
+
+in ansible we have to use 
+
+ansible all -m copy -a "src=sample.txt dest-/root/"
+
+src= source and copy is module  dest=destination
+
+---------------------------------------------------
+
+copying directory 
+
+ansible all -m file -a " path=/root/directname dest=/root state=directory"
+
+file is module path=location dest=destination 
+
+------------------------------------------------------------------
+
+if u want creat file in agent server we have to use
+
+ansible all -m file -a "path=/root/towhich directory we have to creat that name/hello.txt state=touch"
+
+ex :- ansible all -m file -a "path/sudheer/hello.txt state=touch"
+
+------------------------------------------------------------------
+
+state = presant it will install the packages
+
+      = absent it will uninstall the particular pacakge
+--------------------------------------------------------------------
+
+to install packages in adhoc we have to use 
+
+ansible all -m apt -a " name=git state=present"
+
+to check installed are not we have to use following command 
+
+ansible all -a " which git "
+
+---------------------------------------------------------------------
+to give read write excute permission for target server we have to use
+
+ansible appserver -m file  -a "dest=/root/2 mode=777"
+
+in this mode will used to assign permission to the file
+
+to check permission assined or not we have to use this command
+ 
+ansible appserver -a " la -ltr "
+
+----------------------------------------------------------------------
+
+
+
+

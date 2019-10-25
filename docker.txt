@@ -1,0 +1,1361 @@
+Docker 
+
+virtualization :--
+------------------
+
+virtualization means we could run multiple applications isolated in seprate OS but in the same physical server.
+
+application-------- application--------- application
+windows------------linux----------------suse linux
+vm-----------------vm-------------------vm
+hypervision-----hypervision------------hypervision
+hardware-----------hardware--------------hardware
+
+vm has its own OS which is a problem OS need resources like CPU memory etc..
+and we have to maintain OS licence and regularly like patching changes..
+and transfering vms from place to another place and we can bundle everything as vm image ...
+but this images are heavy thr image contains OS with the app ....
+
+Containers:-
+------------
+
+if vms are hardware virtualiization .......
+then containers are OS virtulization.......
+
+we dont need real OS to install our application inside container are dependent on HOST OS its running .....
+
+every container will have an IP address and port on which the application inside container is running .....
+
+   	app 	@@@@@@@@@@      app 	@@@@@@@@@@ 	  app
+
+binaries/libraries------binaries/libraries---------binaries/libraries
+
+-------hostOS-----------     hostOS          -----------hostOS-----------
+
+--------------------------server hardware---------------------------------
+			
+			     container
+
+what is docker :---------
+-------------------------
+Docker is a containerization platform that packages your application and all its dependencies together in the form of a docker container to ensure that your application works seamlessly in any environment.
+
+A company needs to develop a Java Application. In order to do so the developer will setup an environment with tomcat server installed in it. Once the application is developed, it needs to be tested by the tester. Now the tester will again set up tomcat environment from the scratch to test the application. Once the application testing is done, it will be deployed on the production server. Again the production needs an environment with tomcat installed on it, so that it can host the Java application. If you see the same tomcat environment setup is done thrice. There are some issues that I have listed below with this approach:
+
+1) There is a loss of time and effort.
+
+2) There could be a version mismatch in different setups i.e. the developer & tester may have installed tomcat 7, however the system admin installed tomcat 9 on the production server. 
+
+Now, I will show you how Docker container can be used to prevent this loss. 
+
+In this case, the developer will create a tomcat docker image ( A Docker Image is nothing but a blueprint to deploy multiple containers of the same configurations ) using a base image like Ubuntu, which is already existing in Docker Hub (Docker Hub has some base docker images available for free) . Now this image can be used by the developer, the tester and the system admin to deploy the tomcat environment. This is how docker container solves the problem.
+
+Docker is a tool designed to make it easier to create, deploy, and run applications by using containers. 
+Containers allow a developer to package up an application with all of the parts it needs, 
+such as libraries and other dependencies, and ship it all out as one package. 
+By doing so, thanks to the container, 
+
+Docker is a bit like a virtual machine. But unlike a virtual machine, rather than creating a whole virtual operating system, 
+
+Docker allows applications to use the same Linux kernel as the system that they're running on and only requires applications be shipped with things not already running on the host computer. 
+
+This gives a significant performance boost and reduces the size of the application.
+
+what is docker engine :-
+------------------------
+
+Now I will take you through Docker Engine which is the heart of the Docker system.
+
+Docker Engine is simply the docker application that is installed on your host machine. It works like a client-server application which uses:
+
+    A server which is a type of long-running program called a daemon process
+    A command line interface (CLI) client
+    REST API is used for communication between the CLI client and Docker Daemon
+
+in a Linux Operating system, there is a Docker client which can be accessed from the terminal and a Docker Host which runs the Docker Daemon. We build our Docker images and run Docker containers by passing commands from the CLI client to the Docker Daemon
+
+The Docker Engine - our lightweight and powerful open source containerization technology combined with a work flow for building and containerizing your applications
+
+docker engine having two areas maily
+
+1.Docker images
+
+2.docker containers
+
+what is docker images :--
+-------------------------
+
+Docker Image can be compared to a template which is used to create Docker Containers. They are the building blocks of a Docker Container. These Docker Images are created using the build command. These Read only templates are used for creating containers by using the run command. We will explore Docker commands in depth in the “Docker Commands blog”. 
+
+ Docker lets people (or companies) create and share software through Docker images. Also, you don’t have to worry about whether your computer can run the software in a Docker image — a Docker container can always run it.
+
+I can either use a ready-made docker image from docker-hub or create a new image as per my requirement. In the Docker Commands blog we will see how to create your own image.
+
+A Docker image is a file, comprised of multiple layers, used to execute code in a Docker container. An image is essentially built from the instructions for a complete and executable version of an application, which relies on the host OS kernel. When the Docker user runs an image, it becomes one or multiple instances of that container.
+
+A Docker image is made up of multiple layers. A user composes each Docker image to include system libraries, tools, and other files and dependencies for the executable code. Image developers can reuse static image layers for different projects. Reuse saves time, because a user does not have to create everything in an image
+
+images that we are shipping should be light weight and will contain files and libraries that required to run inside 
+------------------------------------------------------------------------------------------------------------------------
+A Docker image is built up from a series of layers. Each layer represents an instruction in the image’s Dockerfile. Each layer except the very last one is read-only. Consider the following Dockerfile:
+-------------------------------------------------------------------------------------------------------------------------
+FROM ubuntu:15.04
+COPY . /app
+RUN make /app
+CMD python /app/app.py
+
+This Dockerfile contains four commands, each of which creates a layer. The FROM statement starts out by creating a layer from the ubuntu:15.04 image. The COPY command adds some files from your Docker client’s current directory. The RUN command builds your application using the make command. Finally, the last layer specifies what command to run within the container.
+
+Each layer is only a set of differences from the layer before it. The layers are stacked on top of each other. When you create a new container, you add a new writable layer on top of the underlying layers. This layer is often called the “container layer”. All changes made to the running container, such as writing new files, modifying existing files, and deleting files, are written to this thin writable container layer. The diagram below shows a container based on the Ubuntu 15.04 image.
+
+docker container:---
+--------------------
+
+The major difference between a container and an image is the top writable layer. All writes to the container that add new or modify existing data are stored in this writable layer. When the container is deleted, the writable layer is also deleted. The underlying image remains unchanged.
+
+Because each container has its own writable container layer, and all changes are stored in this container layer, multiple containers can share access to the same underlying image and yet have their own data state. The diagram below shows multiple containers sharing the same Ubuntu
+
+Installation Steps:
+=====================	
+# Update apt-get cache
+	$ sudo apt-get update
+
+# Install docker dependencies
+	$ sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+# Add GPG key to apt repository
+	$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Setup Stable repository (Add docker download URL manually to apt cache)
+	$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	
+# Update apt package index:
+	$ sudo apt-get update
+	
+# Install Latest version of Docker
+	$ sudo apt-get install docker-ce
+
+checking of installation :--
+----------------------------
+1.docker version
+2.docker -v
+3.docker info
+
+docker version 
+-----------------------------------------------------
+
+it will give the output with both engine and client 
+
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:29:11 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:27:45 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
+
+2.docker -v
+-------------------------------------------------------------
+
+it will give only docker version information 
+
+Docker version :-- 19.03.2, build 6a30dfc
+
+--------------------------------------------------------------
+
+3.docker info :--
+
+Client:
+ Debug Mode: false
+
+Server:
+ Containers: 9
+  Running: 0
+  Paused: 0
+  Stopped: 9
+ Images: 3
+ Server Version: 19.03.2
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Native Overlay Diff: true
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive
+ Runtimes: runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: 894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc version: 425e105d5a03fabd737a126ad93d62a9eeede87f
+ init version: fec3683
+ Security Options:
+  apparmor
+  seccomp
+   Profile: default
+ Kernel Version: 5.0.0-25-generic
+ Operating System: Ubuntu 18.04.3 LTS
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 4
+ Total Memory: 3.744GiB
+ Name: sudheer-Lenovo-G50-70
+ ID: 6ETU:D2ZS:GA2M:NYEJ:CLGQ:5U4W:CGMY:PIK2:7TVJ:QIBR:KSOQ:N6IQ
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ Username: gowrasudheer
+ Registry: https://index.docker.io/v1/
+ Labels:
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Live Restore Enabled: false
+
+WARNING: No swap limit support
+
+-------------------------------------------------------------------------------
+
+1.docker images
+2.docker pull
+3.docker rmi
+
+docker images:--
+----------------
+
+by using docker images command we can find out entier data about docker
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker images
+
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+localhost:5000/figlet   v1                  22a625b11c3a        5 weeks ago         92.8MB
+ubuntu                  latest              a2a15febcdf3        2 months ago        64.2MB
+registry                2                   f32a97de94e1        7 months ago        25.8MB
+registry                latest              f32a97de94e1        7 months ago        25.8MB
+
+dockerhub		version		    image name Id        time slot	     size in mbs 
+
+it will give hidden images list also -a
+----------------------------------------
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker images -a
+
+when we use -q it will give only images Id :-
+---------------------------------------------
+
+it will give hidden images list also -a
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker images -q
+22a625b11c3a
+a2a15febcdf3
+f32a97de94e1
+f32a97de94e1
+
+--------------------------------------------------
+
+docker rmi:--
+----------
+
+docker rmi used to remove docker images
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker rmi -f f32a97de94e1
+Untagged: registry:2
+Untagged: registry:latest
+Untagged: registry@sha256:8004747f1e8cd820a148fb7499d71a76d45ff66bac6a29129bfdbfdc0154d146
+Deleted: sha256:f32a97de94e13d29835a19851acd6cbc7979d1d50f703725541e44bb89a1ce91
+
+docker search :-
+----------------
+docker search command will give the output related that image example
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker search tomcat
+NAME                          DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
+tomcat                        Apache Tomcat is an open source implementati…   2540                [OK]                
+tomee                         Apache TomEE is an all-Apache Java EE certif…   68                  [OK]                
+dordoka/tomcat                Ubuntu 14.04, Oracle JDK 8 and Tomcat 8 base…   53                                      [OK]
+bitnami/tomcat                Bitnami Tomcat Docker Image                     29                                      [OK]
+kubeguide/tomcat-app          Tomcat image for Chapter 1                      27                                      
+consol/tomcat-7.0             Tomcat 7.0.57, 8080, "admin/admin"              16                                      [OK]
+cloudesire/tomcat             Tomcat server, 6/7/8                            15                                      [OK]
+aallam/tomcat-mysql           Debian, Oracle JDK, Tomcat & MySQL              11                                      [OK]
+arm32v7/tomcat                Apache Tomcat is an open source implementati…   9                                       
+rightctrl/tomcat              CentOS , Oracle Java, tomcat application ssl…   5                                       [OK]
+maluuba/tomcat7-java8         Tomcat7 with java8.                             4                                       
+unidata/tomcat-docker         Security-hardened Tomcat Docker container.      4                                       [OK]
+arm64v8/tomcat                Apache Tomcat is an open source implementati…   2                                       
+
+
+docker pull :--
+---------------
+
+docker pull command is uded to pull the image from docker hub are any repository were we stored docker images 
+
+docker pull < image name >
+
+
+Pull an image from Docker Hub
+-----------------------------------------------------------------------------
+To download a particular image, or set of images use docker pull. 
+If no tag is provided, Docker Engine uses the :latest tag as a default. 
+This command pulls the debian:latest image:
+
+$ docker pull debian
+
+Using default tag: latest
+latest: Pulling from library/debian
+fdd5d7827f33: Pull complete
+a3ed95caeb02: Pull complete
+Digest: sha256:e7d38b3517548a1c71e41bffe9c8ae6d6d29546ce46bf62159837aad072c90aa
+Status: Downloaded newer image for debian:latest
+
+Docker images can consist of multiple layers.
+In the example above, the image consists of two layers fdd5d7827f33 and a3ed95caeb02.
+
+Layers can be reused by images. For example, the debian:jessie image shares both layers with debian:latest. Pulling the debian:jessie image therefore only pulls its metadata, but not its layers, because all layers are already present locally
+------------------------------------------------------------------------------
+$ docker pull debian:jessie
+
+jessie: Pulling from library/debian
+fdd5d7827f33: Already exists
+a3ed95caeb02: Already exists
+Digest: sha256:a9c958be96d7d40df920e7041608f2f017af81800ca5ad23e327bc402626b58e
+Status: Downloaded newer image for debian:jessie
+
+To see which images are present locally, use the docker images command:
+
+$ docker images
+
+REPOSITORY   TAG      IMAGE ID        CREATED      SIZE
+debian       jessie   f50f9524513f    5 days ago   125.1 MB
+debian       latest   f50f9524513f    5 days ago   125.1 MB
+
+Docker uses a content-addressable image store, and the image ID is a SHA256 digest covering the image’s configuration and layers. In the example above, debian:jessie and debian:latest have the same image ID because they are actually the same image tagged with different names. Because they are the same image, their layers are stored only once and do not consume extra disk space.
+
+-------------------------------------------------------------------------------
+
+we can pull the docker images by their version in the sence docker tag
+
+So far, you’ve pulled images by their name (and “tag”). Using names and tags is a convenient way to work with images. When using tags, you can docker pull an image again to make sure you have the most up-to-date version of that image. For example, docker pull ubuntu:14.04 pulls the latest version of the Ubuntu 14.04 image.
+
+
+
+For more information about images, layers, and the content-addressable store, refer to understand images, containers, and storage drivers
+
+docker pull ubuntu:14.04
+
+14.04: Pulling from library/ubuntu
+5a132a7e7af1: Pull complete
+fd2731e4c50c: Pull complete
+28a2f68d1120: Pull complete
+a3ed95caeb02: Pull complete
+Digest: sha256:45b23dee08af5e43a7fea6c4cf9c25ccf269ee113168c19722f87876677c5cb2
+Status: Downloaded newer image for ubuntu:14.04
+-----------------------------------------------------------------------------
+
+Pull a repository with multiple images
+
+By default, docker pull pulls a single image from the registry. A repository can contain multiple images. To pull all images from a repository, provide the -a (or --all-tags) option when using docker pull.
+
+This command pulls all images from the fedora repository:
+
+$ docker pull --all-tags fedora
+
+Pulling repository fedora
+ad57ef8d78d7: Download complete
+105182bb5e8b: Download complete
+511136ea3c5a: Download complete
+73bd853d2ea5: Download complete
+....
+
+Status: Downloaded newer image for fedora
+
+After the pull has completed use the docker images command to see the images that were pulled. The example below shows all the fedora images that are present locally:
+
+$ docker images fedora
+
+REPOSITORY   TAG         IMAGE ID        CREATED      SIZE
+fedora       rawhide     ad57ef8d78d7    5 days ago   359.3 MB
+fedora       20          105182bb5e8b    5 days ago   372.7 MB
+fedora       heisenbug   105182bb5e8b    5 days ago   372.7 MB
+fedora       latest      105182bb5e8b    5 days ago   372.7 MB
+
+-------------------------------------------------------------------------------------------
+
+docker container :-- 
+--------------------
+Containers are the ready applications created from Docker Images or you can say a Docker Container is a running instance of a Docker Image and they hold the entire package needed to run the application. This happens to be the ultimate utility of Docker. 
+
+Docker Container is a standardized unit which can be created on the fly to deploy a particular application or environment. It could be an Ubuntu container, CentOs container, etc. to full-fill the requirement from an operating system point of view. Also, it could be an application oriented container like CakePHP container or a Tomcat-Ubuntu container etc.
+
+docker container commands :--
+-----------------------------
+
+docker container run -i -t -p 1000:8000 --rm my_image
+
+-i is short for --interactive. Keep STDIN open even if unattached.
+
+-tis short for--tty. Allocates a pseudo terminal that connects your terminal with the container’s STDIN and STDOUT.
+
+You need to specify both -i and -t to then interact with the container through your terminal shell.
+
+
+-p is short for --port. The port is the interface with the outside world.1000:8000 maps the Docker port 8000 to port 1000 on your machine. If you had an app that output something to the browser you could then navigate your browser to localhost:1000 and see it.
+
+--rm Automatically delete the container when it stops running.
+
+Let’s look at some more examples of run.
+
+------------------------------------------------------------------------------------------------------------
+
+docker container run -it my_image my_command
+
+sh is a command you could specify at run time.sh will start a shell session inside your container that you can interact with through your terminal. sh is preferable to bash for Alpine images because Alpine images don’t come with bash installed. Type exit to end the interactive shell session.
+
+Notice that we combined -i and -t into -it.
+
+docker container run -d my_image
+
+-d is short for --detach. Run the container in the background. Allows you to use the terminal for other commands while your container runs.
+Checking Container Status
+
+If you have running Docker containers and want to find out which one to interact with, then you need to list them.
+
+----------------------------------------------------------------------------------
+
+docker exec by using this command we can add new application to our older images
+
+if u run ur container detached mode we have to use following command  
+
+docker exec -it 4b606b47de8d /bin/bash
+
+docker ps :--
+--------- ----------------------------------------------------------------
+
+docker ps command will give list of containers presnt in the in u r machine 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker ps 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+4b606b47de8d        ubuntu              "/bin/bash"         16 minutes ago      Up 15 minutes                           lucid_shaw
+
+docker ps -a :--
+---------------------------------------------------------------------------
+it will show all the running and stopped containers 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+8d9b21866eb6        ubuntu              "/bin/bash"              3 minutes ago       Exited (0) 2 minutes ago                       dfggg jovial_margulis
+4b606b47de8d        ubuntu              "/bin/bash"              15 minutes ago      Up 15 minutes                                   lucid_shaw
+5f9dc664152c        ubuntu              "/bin/bash"              8 days ago          Exited (0) 8 days ago                           c
+
+docker ps -l :--
+----------------------------------------------------------------------------
+it will give the output latest created container 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker ps -l
+
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+8d9b21866eb6        ubuntu              "/bin/bash"         8 minutes ago       Exited (0) 8 minutes ago                       jovial_margulis
+
+docker ps -a -q :--
+----------------------------------------------------------------------------
+
+it will show only numerical containers id
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker ps -a -q
+
+8d9b21866eb6
+4b606b47de8d
+5f9dc664152c
+83f0f07509f8
+
+ctrl d:-
+------------------------------------------------------
+for exit from the container 
+
+ctrl p q
+------------------------------------------------------
+exit from container and did not stop
+
+creating a image from container :--
+-----------------------------------
+for this we have start contaier with base image like ubuntu
+
+docker run -it --name figlet_app ubuntu
+
+it will creat a id 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it ubuntu
+
+root@4b606b47de8d:/# 
+
+after that we have to add what are the apps requiers to run in our images
+
+apt-get update 
+apt-get install figlet
+
+after that we have to detach from the container with out exit == ctrl+pq
+
+and then we have to type command call 
+
+docker commit -m "figlet ubuntu" -a " author " 4b606b47de8d figletssh_ubuntu
+
+and it will creat a image in our local
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+figlet_ubuntu        latest              4ee3dfdca988        12 seconds ago      208MB
+debian                  latest              8e9f8546050d        2 days ago          114MB
+
+system :--
+----------
+docker stats :-
+------------
+
+it will show all the running container memory 
+
+docker system df :-
+-------------------
+it will show all memory usage of containers
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker system df
+TYPE                TOTAL               ACTIVE              SIZE                RECLAIMABLE
+Images              5                   3                   350.4MB             206.9MB (59%)
+Containers          22                  1                   979.2MB             979.2MB (99%)
+Local Volumes       3                   1                   47.21MB             19B (0%)
+Build Cache         0                   0                   0B                  0B
+
+docker system prune :-
+--------------------
+it will remove all stopeed containers 
+
+Rename a container:--
+-------------------
+$ docker rename db-server3 db-server-name3
+
+765bcda064ae        hello-world         "/bin/bash"              23 hours ago        Created                                  db-server-name3 
+485b8b02c987        hello-world         "4aa5040b1b08"           23 hours ago        Created                                      sudheer
+
+# Delete all (running/stoped) containers at once
+ $ docker rm -f `docker container ls -a -q`
+ $ docker rm -f $(docker container ls -a -q)
+ $ docker rm -f $(docker ps -a -q)
+
+# Delete running containers only
+$ docker rm -f $(docker container ls -q)
+$ docker rm -f $(docker ps -q)
+
+# list stopped containers only
+$ docker container ls -f status=exited
+
+# Inspecting the container's processes from host machine
+	$ docker top <container-name>
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker top 9b7dd669ca57
+UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+root                3709                3682                0                   21:15               pts/0               00:00:00            /bin/bash
+
+# Show last 4 containers (stopped/running)
+	
+$ docker ps -n4
+sudheer@sudheer-Lenovo-G50-70:~$ docker ps -n4
+
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                    PORTS               NAMES
+9b7dd669ca57        figletssh_ubuntu    "/bin/bash"         23 hours ago        Up About an hour                              sad_elion
+9be81e14e39c        hello-world         "/hello"            23 hours ago        Exited (0) 23 hours ago                       web
+fe24657bb533        ubuntu              "/bin/bash"         23 hours ago        Exited (0) 23 hours ago                       focused_elgamal
+ac8f8b1475c2        fce289e99eb9        "/hello"            23 hours ago        Exited (0) 23 hours ago                       agitated_ganguly
+
+# Find More About The Container :--
+-----------------------------------
+
+- 'docker inspect' comamnd interrogates the container and returns complete 
+   information about it.
+
+  Ex: image name, IP, Memory details, hostname ..etc
+	 
+	 Examples:
+	$ docker inspect <container-name>
+
+	$ docker inspect -f '{{.Config.Hostname}}' tomcat-server1
+
+	$ docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' tomcatserver1
+	
+ Note: use --format (OR) -f 
+
+#
+Allocating memory for a container (below command allocates 1 GB RAM):-------
+----------------------------------------------------------------------	
+$ docker run -it --name tomcat-server -m 1g ubuntu /bin/bash
+
+$ docker run -it --name tomcat-server -m 1024m ubuntu /bin/bash 
+
+#
+Updating memory of a container (which is exist already) 
+	$ docker update -m 2024m tomcat-server	 
+
+What is Docker Registry?
+------------------------
+
+Finally, Docker Registry is where the Docker Images are stored. The Registry can be either a user’s local repository or a public repository like a Docker Hub allowing multiple users to collaborate in building an application. Even with multiple teams within the same organization can exchange or share containers by uploading them to the Docker Hub. Docker Hub is Docker’s very own cloud repository similar to GitHub.
+What is Docker Architecture?
+
+Docker Architecture includes a Docker client – used to trigger Docker commands, a Docker Host – running the Docker Daemon and a Docker Registry – storing Docker Images. The Docker Daemon running within Docker Host is responsible for the images and containers.
+
+Docker Architecture - What Is Docker Container - Edureka
+Course Curriculum
+Docker Training and Certification
+Weekday / Weekend Batches
+
+    To build a Docker Image, we can use the CLI (client) to issue a build command to the Docker Daemon (running on Docker_Host). The Docker Daemon will then build an image based on our inputs and save it in the Registry, which can be either Docker hub or a local repository
+    If we do not want to create an image, then we can just pull an image from the Docker hub, which would have been built by a different user
+    Finally, if we have to create a running instance of my Docker image, we can issue a run command from the CLI, which will create a Docker Container. 
+-------------------------------
+docker login :--
+
+pushing image with created repository:-
+--------------------------------------- 
+
+after login to docker hub we have to creat repository 
+
+we have to give repository name :-- 
+descrption for that :--
+
+docker push 
+
+save :--
+
+and the repository name 
+
+docker push gowrasudheer/javaapp:tagname
+
+pushing local image to docker hub 
+
+command is 
+
+docker push < image name >
+
+if we want push any image we have rename it first because by using docker tag command 
+								   -------------------
+if we wont rename our image its going describe error called 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker push figletssh_ubuntu
+The push refers to repository [docker.io/library/figletssh_ubuntu]
+b6945d769ca0: Preparing 
+122be11ab4a2: Preparing 
+7beb13bce073: Preparing 
+f7eae43028b3: Preparing 
+6cebf3abed5f: Preparing 
+denied: requested access to the resource is denied
+
+rename the image by using docker tag command :--
+-------------------------------------------------------------------------------------------------------------------------------------
+docker tag <imagename> <new name >:tagname 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker tag figletssh_ubuntu gowrasudheer/figlet_ubuntu:v1
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker tag figletssh_ubuntu gowrasudheer/figlet_ubuntu:v1
+sudheer@sudheer-Lenovo-G50-70:~$ docker images
+REPOSITORY                   TAG                 IMAGE ID            CREATED             SIZE
+gowrasudheer/figlet_ubuntu   v1                  4ee3dfdca988        39 hours ago        208MB
+figletssh_ubuntu             latest              4ee3dfdca988        39 hours ago        208MB
+debian                       latest              8e9f8546050d        4 days ago          114MB
+
+----------------------------------------------------------------------------------------------------------------------------------------
+dockerpush may use in two ways 
+
+docker push username/image_name:tagname
+
+docker push gowrasudheer/figlet_ubuntu:tagname
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker push gowrasudheer/figlet_ubuntu:v1
+The push refers to repository [docker.io/gowrasudheer/figlet_ubuntu]
+b6945d769ca0: Pushed 
+122be11ab4a2: Pushed 
+7beb13bce073: Pushed 
+f7eae43028b3: Pushed 
+6cebf3abed5f: Pushed 
+v1: digest: sha256:baa13cc49f64837865d6982059d7aa5fa6a15590ccd5773b8a5e45393aa193c3 size: 1364
+
+how to push a java file from our local machine and created iamge :-
+-----------------------------------------------------------------
+creat directory
+and write a java file 
+nd write a Dockerfile 
+and the built the Docker 
+--------------------------------------------------
+make directory :-
+
+sudheer@sudheer-Lenovo-G50-70:~$ mkdir sudheer
+
+and after that we have to cd to taht directory 
+
+sudheer@sudheer-Lenovo-G50-70:~$ cd sudheer
+
+---------------------------------------------------
+
+And add the java file into directory for that 
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheer$ vim Main.java
+
+and we have to add text 
+
+public class Main
+{
+public static void main(String[] args) {
+System.out.println("Hello World");
+}
+}
+
+-----------------------------------------------------
+And after that we have to use the Dockerfile 
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheer$ vim Dockerfile
+
+FROM openjdk:8
+COPY Main.java .
+RUN javac  Main.java
+CMD ["java" , "Main"]
+
+FROM in the sence source openjdk:8
+copy file from Main.java .( if java file exists in same directory we have to use . )
+RUN if we use run command we are going to execute the following commands javac command for compilation
+CMD is used excute commands on terminal
+
+-----------------------------------------------------
+
+after that if u want built any image by using from Docker file we have to use following command 
+
+docker build -t < image name >:tagname . ( in this t means terminal )
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker build -t java_app:v1 .
+
+Sending build context to Docker daemon  4.096kB
+Step 1/4 : FROM openjdk:8
+ ---> 57c2c2d2643d
+Step 2/4 : COPY Main.java .
+ ---> 905aea8475f2
+Step 3/4 : RUN javac  Main.java
+ ---> Running in eff51e910207
+Removing intermediate container eff51e910207
+ ---> 9def28e99ffe
+Step 4/4 : CMD ["java" , "Main"]
+ ---> Running in 1227aceffcdb
+Removing intermediate container 1227aceffcdb
+ ---> 226852c16fe3
+Successfully built 226852c16fe3
+Successfully tagged new:latest
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+javaapp               latest                226852c16fe3        16 seconds ago      488MB
+-------
+openjdk                 8                   57c2c2d2643d        3 days ago          488MB
+debian                latest                8e9f8546050d        5 days ago          114MB
+localhost:5000/figlet   v1                  22a625b11c3a        5 weeks ago         92.8MB
+
+docker images are created by using layers each command of dockerfile will creat a layer 
+
+------------------------------------------------------------------------------
+above result we can see that first step download jdk
+
+it will create local image openjdk 
+
+and then copying that file to docker image 
+
+and then we are going excute commands like javac 
+
+and then its going to creat a cli mode and give output like helloworld
+
+-------------------------------------------------------------------------------
+
+pushing the docker image with creating repository in docker hub
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker images
+
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+javaapp               latest                226852c16fe3        16 seconds ago      488MB
+-------
+openjdk                 8                   57c2c2d2643d        3 days ago          488MB
+debian                latest                8e9f8546050d        5 days ago          114MB
+localhost:5000/figlet   v1                  22a625b11c3a        5 weeks ago         92.8MB
+
+and we have to rename our image with docker hub user name 
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker tag new gowrasudheer/javaapp
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker images
+
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+gowrasudheer/javaapp    latest              226852c16fe3        3 hours ago         488MB
+new                     latest              226852c16fe3        3 hours ago         488MB
+
+after that we have to push our iamge to dockerhub 
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker push gowrasudheer/javaapp
+
+The push refers to repository [docker.io/gowrasudheer/javaapp]
+a016cfa3e142: Pushed 
+053492f823b3: Pushed 
+a8902d6047fe: Mounted from library/openjdk 
+99557920a7c5: Mounted from library/openjdk 
+7e3c900343d0: Mounted from library/openjdk 
+b8f8aeff56a8: Mounted from library/openjdk 
+687890749166: Mounted from library/openjdk 
+2f77733e9824: Mounted from library/openjdk 
+97041f29baff: Mounted from library/openjdk 
+latest: digest: sha256:c5bbb3a1c707abf05a7b0c82f284d73c3b394eea539a5b09745ae568fdd4ac00 size: 2209
+------------------------------------------------------------------------------------------------------------------
+docker logs:--
+------------
+by using docker logs command we can find out our container satus if there is any failure we can find out there
+
+sudheer@sudheer-Lenovo-G50-70:~/sudheerb$ docker logs c51111badd98
+
+Hello World
+
+it will print the details about that container details
+
+-------------------------------------------------------------------------------------------------------------------
+docker volume :--
+-----------------
+why we need volume :- 
+
+docker is continer based applicatio ---> 
+
+when we working docker we stored our data into container if we delete the container our data will be lost 
+
+if u want backup those data we are using docker volume 
+
+--------------------------------------------------
+
+list out the docker volumes present in the local system 
+
+docker volume ls ( it will list all the volumes presant in the local machine ):---
+----------------------------------------------------------------------------------
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume ls 
+DRIVER              VOLUME NAME
+local               37cf07d6bcaa530e826ee64b3de9a61d51604662077219069a48716894c4e0c6
+local               mydata
+
+creating a indepensent volume :--
+---------------------------------
+
+creating docker volume in our machine by using following command 
+
+docker volume create --name mydata
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume create --name mydata
+
+mydata
+
+if we run the command we will we get a volume in local machie 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume ls
+ 
+DRIVER              VOLUME NAME
+local               37cf07d6bcaa530e826ee64b3de9a61d51604662077219069a48716894c4e0c6
+local               mydata
+----------------------------------------------------------------------------------
+
+docker run --rm -it -p 8081:8080 -v /path/of/hostmachine:/containerpath --name sudheer image name 
+
+if u run the following command it will creat a container and if exit the container will dissappear so we have take backup so we use volumes 
+
+docker run -it --rm -v mydata:/c_mydata ubuntu
+--------------------------------------------------------------------------------------
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --rm -v mydata:/c_mydata ubuntu ( running the command )
+
+root@3ab0ddbe1153:/# ls ( a ubuntu container were created )
+
+bin  boot  c_mydata  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+--------------------------
+inside container we are creating a foldder called c_mydata 
+
+root@3ab0ddbe1153:/# cd c_mydata/
+
+and we are going add some add by creating a file 
+
+root@3ab0ddbe1153:/c_mydata# ls
+
+root@3ab0ddbe1153:/c_mydata# cat > text.file
+echo " the data should be used for backup "
+
+root@3ab0ddbe1153:/c_mydata# ls
+text.file
+
+root@3ab0ddbe1153:/c_mydata# cat text.file 
+echo " the data should be used for backup "
+
+root@3ab0ddbe1153:/c_mydata# exit
+exit
+
+--------------------------------------------------------------------------------------------
+
+after that the container wer deleted due to we are uses a command called --rm so
+
+if u want check the data were present in our local machine we have to use following command 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume inspect mydata 
+[
+    {
+        "CreatedAt": "2019-10-22T18:57:08+05:30",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/mydata/_data",
+        "Name": "mydata",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+
+if u want to get back that data we have to creat another container :--
+------------------------------------------------------------------
+docker run -it -v (volume name ):(foldername to see the data ) image name 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --rm -v mydata:/mydata1 ubuntu
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --rm -v mydata:/mydata1 ubuntu
+
+root@2d0b604b4095:/# ls
+
+bin  boot  dev  etc  home  lib  lib64  media  mnt  mydata1  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+                                                   -------
+root@2d0b604b4095:/# cd mydata1/
+
+root@2d0b604b4095:/mydata1# ls
+
+text.file
+
+root@2d0b604b4095:/mydata1# cat text.file (we found our data here )
+
+echo " the data should be used for backup "
+
+root@2d0b604b4095:/mydata1# 
+
+------------------------------------------------------------------
+
+we can creat valumes in another way by using following command 
+
+docker run -it --rm --name < container name > -v < volume name what ever u want creat >:/< folder creation > ubuntu 
+
+docker run -it --rm --name sudheer -v vasavi:/god ubuntu
+ 
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --rm --name bhsu -v vasavi:/god ubuntu
+
+root@d997b025d6bf:/# ls ( after running the following command we will get following container )
+			---------------------------------------------------------------------------
+bin  boot  dev  etc  god  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+root@d997b025d6bf:/# cd god/
+
+root@d997b025d6bf:/god# cd
+
+--------------------------------------------------------------
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume ls
+
+DRIVER              VOLUME NAME
+
+local               mydata
+
+local               myyyyy
+
+local               vasavi
+		    ------
+so here the volume were created vasavi  
+
+---------------------------------------------------------------
+
+if we want delete any volume we have to use following command 
+
+docker volume rm < volume name >
+
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume ls
+
+DRIVER              VOLUME NAME
+
+local               mydata
+
+local               myyyyy
+
+local               vasavi
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume rm myyyyy 
+
+myyyyy
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker volume ls
+
+DRIVER              VOLUME NAME
+
+local               mydata
+
+local               vasavi
+
+sudheer@sudheer-Lenovo-G50-70:~$ 
+
+---------------------------------------------------------------- 
+
+saving data from the existing directory:----
+--------------------------------------------
+
+docker run -it -v < volume name >:/directory name ubuntu 
+
+docker run -it -v darling:/var ubuntu ( we are creating a volume with existing file name var)
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --rm -v myd:/var ubuntu
+
+root@0bf300e96ef3:/# ls
+
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+root@0bf300e96ef3:/# cd var/
+
+root@0bf300e96ef3:/var# ls
+
+backups  cache  lib  local  lock  log  mail  opt  run  spool  tmp
+
+root@0bf300e96ef3:/var# mkdir sudddd (for doubt i am aading one file that will transfer data are not )
+					----------------------------------------------------------
+root@0bf300e96ef3:/var# ls
+
+backups  cache  lib  local  lock  log  mail  opt  run  spool  sudddd  tmp
+							      ------
+root@0bf300e96ef3:/var# exit
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run --rm -v myd:/sudu ubuntu ls sudu 
+
+backups
+cache
+lib
+local
+lock
+log
+mail
+opt
+run
+spool
+sudddd
+------
+tmp
+------------------------------------------------------------------------------------------------------
+
+how to share data to multiple containers 
+
+first we have to creat a container with name 
+
+docker run -it --name < container name > -v < volume name > :/ < folder name > image name 
+-----------------------------------------------------------------------------------------
+docker run -it --name share_data -v mydata:/sudheer ubuntu
+		----------------	   --------
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --name share_data -v mydata:/sudheer ubuntu
+
+root@f9f9f703e258:/# 
+
+root@f9f9f703e258:/# echo " the data for file transfer " > /sudheer/file.txt ( and added text to the file )
+
+root@f9f9f703e258:/# cd sudheer/
+
+root@f9f9f703e258:/sudheer# ls
+
+file.txt
+
+root@f9f9f703e258:/sudheer# cat file.txt 
+
+ the data for file transfer 
+
+root@f9f9f703e258:/sudheer# exit
+
+and we have creat a container with alredy existing container to share our data :-- 
+
+-------------------------------------------------------------------------------
+
+docker run -it --name < new container name > --volumes-from < container name > ubuntu 
+-------------------------------------------------------------------------------------
+docker run -it --name reciver --volumes-from share_data ubuntu
+		      ------	------------ ----------	
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it --name reciver --volumes-from share_data ubuntu 
+
+root@a7d04694a19d:/# ls
+
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sudheer  sys  tmp  usr  var
+
+root@a7d04694a19d:/# cd sudheer/
+
+root@a7d04694a19d:/sudheer# l 
+
+file.txt
+
+root@a7d04694a19d:/sudheer# cat file.txt ( here the data we found from share_dta )
+
+ the data for file transfer 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+bind mode < we can see the content in the container > bind should starts with -v / 
+
+docker run -it -v /< dirctory name > : < directory name >  iamge name   
+
+docker run -it -v /myvolumesdata/file.txt:/containerdata/file.tx ubuntu
+
+		-------------------------  like this 
+
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker run -it -v /myvolumesdata/file.txt:/containerdata/file.tx ubuntu
+
+root@4f54a689da4b:/# ls     
+
+bin  boot  containerdata  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+	   -------------
+root@4f54a689da4b:/# cd containerdata/
+
+root@4f54a689da4b:/containerdata# ls
+
+file.tx
+-------
+root@4f54a689da4b:/containerdata# cd file.tx/
+
+root@4f54a689da4b:/containerdata/file.tx# ls
+
+root@4f54a689da4b:/containerdata/file.tx# cat > pom.xml ( text add in the container that should be display on host machine )
+					  -------------
+this is only readig 
+-------------------
+root@4f54a689da4b:/containerdata/file.tx# exit
+
+sudheer@sudheer-Lenovo-G50-70:~$ ls
+
+1         Desktop     Downloads         file11  flipkart         helloe  Music     Pictures  projectt  setty     Templates
+
+2         Dockerfile  examples.desktop  file2   gamutdevopsdocs  mave    new       pipe      Public    slave     test
+
+conflict  Documents   file              file3   gamutkart2       maven   password  pipeline  rain      sudheerb  Videos
+
+sudheer@sudheer-Lenovo-G50-70:~$ cd /myvolumesdata/file.txt/ ( it stores data in root folder )
+				 ----------------------------
+sudheer@sudheer-Lenovo-G50-70:/myvolumesdata/file.txt$ ls
+			      ---------------------------
+pom.xml
+--------
+sudheer@sudheer-Lenovo-G50-70:/myvolumesdata/file.txt$ cat pom.xml 
+
+this is only readig ( the data is dispalys )
+-------------------
+--------------------------------------------------------------------------------------------------------
+
+docker private registery :----
+------------------------------
+
+private repository --->> registry:2
+
+how to start the 
+
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+
+if u use --restart=always ( if u existing are restart also its always running )
+
+if u want sent u r image local repository 
+
+localhost:5000/< images name >
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+gowrasudheer/javaapp    latest              226852c16fe3        25 hours ago        488MB
+new                     latest              226852c16fe3        25 hours ago        488MB
+openjdk                 8                   57c2c2d2643d        4 days ago          488MB
+debian                  latest              8e9f8546050d        6 days ago          114MB
+localhost:5000/figlet   v1                  22a625b11c3a        6 weeks ago         92.8MB
+ubuntu                  latest              a2a15febcdf3        2 months ago        64.2MB
+registry                2                   f32a97de94e1        7 months ago        25.8MB
+hello-world             latest              fce289e99eb9        9 months ago        1.84kB
+loclahost:5000/figlet   v1                  fce289e99eb9        9 months ago        1.84kB
+sudheer@sudheer-Lenovo-G50-70:~$ docker tag hello-world:latest localhost:5000/hello
+sudheer@sudheer-Lenovo-G50-70:~$ docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+gowrasudheer/javaapp    latest              226852c16fe3        25 hours ago        488MB
+new                     latest              226852c16fe3        25 hours ago        488MB
+openjdk                 8                   57c2c2d2643d        4 days ago          488MB
+debian                  latest              8e9f8546050d        6 days ago          114MB
+localhost:5000/figlet   v1                  22a625b11c3a        6 weeks ago         92.8MB
+ubuntu                  latest              a2a15febcdf3        2 months ago        64.2MB
+registry                2                   f32a97de94e1        7 months ago        25.8MB
+hello-world             latest              fce289e99eb9        9 months ago        1.84kB
+localhost:5000/hello    latest              fce289e99eb9        9 months ago        1.84kB
+loclahost:5000/figlet   v1                  fce289e99eb9        9 months ago        1.84kB
+sudheer@sudheer-Lenovo-G50-70:~$ docker push localhost:5000/hello
+The push refers to repository [localhost:5000/hello]
+af0b15c8625b: Pushed 
+latest: digest: sha256:92c7f9c92844bbbb5d0a101b22f7c2a7949e40f8ea90c8b3bc396879d95e899a size: 524
+sudheer@sudheer-Lenovo-G50-70:~$
+
+--------------------------------------------------------------------------------------
+
+how to see local registery data
+
+sudheer@sudheer-Lenovo-G50-70:~$ curl -X GET http://localhost:5000/v2/_catalog
+
+{"repositories":["hello"]}
+
+sudheer@sudheer-Lenovo-G50-70:~$ 
+
+docker run -d -p 8000:8000 -p 50000:50000 -u root -v /jenkins-home:/home/sudheer/jen jenkins
+
+it will download and start jenkins server 
+
+to start server we have to ip 
+
+172.17.0.3:8080
+
+----------------------------------------------------------------------------------------
+
+docker compose is a tool for defing and running multi-container docker application . with compose you use yaml file to configure application service. then with a singel command you can creat are start services from your configuration
+
+DEfine your apps environment with a Dockerfile so it can reproduced anywhere
+
+define the services that make up your app docker_compose.yml so that can be run
+
+run docker-compose up and compose starts and run your entier app 
+
+to check docker-compose version 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker-compose -v
+
+docker-compose version 1.17.1, build unknown
+
+creat docker compose file at any location of ur system
+
+docker-compose.yml
+
+sudheer@sudheer-Lenovo-G50-70:~$ touch docker-compose.yml
+
+sudheer@sudheer-Lenovo-G50-70:~$ vim docker-compose.yml 
+
+version: '3'
+
+services:
+
+  web: ( service or server )
+    image: nginx -------------------web service
+
+  database: ( service or server ) 
+    image: redis ----------------- data base service
+
+version: '3'
+services:
+
+  web:
+    image: nginx
+
+
+  database:
+    image: redis
+------------------------------------------------------ 
+to check the validity of file we have to use following command 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker-compose config   ( if u did any mistake its going to get a error )
+
+ERROR: The Compose file './docker-compose.yml' is invalid because:
+Unsupported config option for services: 'web'
+
+
+sudheer@sudheer-Lenovo-G50-70:~$ vim docker-compose.yml ( if it is everything is fine then the output will  like this )
+sudheer@sudheer-Lenovo-G50-70:~$ docker-compose config
+services:
+  database:
+    image: git
+  web:
+    image: ngnix
+version: '3.0'
+
+---------------------------------------------------------------
+run docker-compose.yml file by command 
+docker-compose up -d 
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker-compose up -d
+Pulling database (redis:latest)...
+latest: Pulling from library/redis
+8d691f585fa8: Already exists
+8ccd02d17190: Pull complete
+4719eb1815f2: Pull complete
+200531706a7d: Pull complete
+eed7c26916cf: Pull complete
+e1285fcc6a46: Pull complete
+Digest: sha256:fe80393a67c7058590ca6b6903f64e35b50fa411b0496f604a85c526fb5bd2d2
+Status: Downloaded newer image for redis:latest
+Creating sudheer_database_1 ... 
+Creating sudheer_web_1 ... 
+Creating sudheer_web_1
+Creating sudheer_database_1 ... done
+
+-----------------------------------------------------------
+
+sudheer@sudheer-Lenovo-G50-70:~$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                                        NAMES
+e81c56fd4f78        redis               "docker-entrypoint.s…"   11 seconds ago      Up 4 seconds        6379/tcp                                                     sudheer_database_1
+82b06d1b3961        nginx               "nginx -g 'daemon of…"   11 seconds ago      Up 5 seconds        80/tcp                                      
+
+soo to continers are created in the one file 
+
+if u want stop the container we have to use 
+
+docker-compose down sudheer@sudheer-Lenovo-G50-70:~$ docker-compose down
+Stopping sudheer_database_1 ... done
+Stopping sudheer_web_1      ... done
+Removing sudheer_database_1 ... done
+Removing sudheer_web_1      ... done
+Removing network sudheer_default
+sudheer@sudheer-Lenovo-G50-70:~$ 
+
+
+
+
+                                                                                                                                                                                                                                                                                  
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+

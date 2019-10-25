@@ -1,0 +1,914 @@
+welcome to shell scripting 
+
+---------------------------------
+---------------------------------
+
+if u want see all the shells avilable on the system u have to enter the following commond 
+cat /etc/shells
+
+in this we are using bash script /bin/bash
+
+in desktop we are creating a folder called hello.sh
+and we are giving permission to the script by adding chmod 777 hello.sh
+it will give excutable permissions
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+
+if you want start any script we have to mention sheebang value like this 
+
+#! /bin/bash
+
+bash = born again shell
+
+--------------------------------------------------------------------------
+echo " print the output "
+
+echo is used display the content present in between " "
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+redirect to file 
+
+by how can we cating the output and saving into the file
+
+****************************
+#! /bin/bash 
+
+echo " the output should be store " > tesx.txt
+
+***output***
+
+if you run above script a text file will be created on desktop ( if u run on desktop ) with output of {the output should be store}
+
+&&&&&&&& another way &&&&&&&&&&&&
+
+#! /bin/bash 
+
+cat > text.txt
+
+***output***
+
+if you run above script in terminal we have enter the data it will be stored on text.txt file 
+
+&&&&&&&&&&& another way &&&&&&&&&
+
+#! /bin/bash 
+
+cat > text.txt
+ 
+if run this script we are going to create a file text.txt with some out put,,,,,if u run again the same script the data will be replaced with new data if u apend the to the old data we have to use >> two angle brocakets like this
+
+#! /bin/bash 
+
+cat >> text.txt  
+
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+
+comments 
+
+1. one line comment 
+2. multiple line comment
+
+##one line comment ##
+
+if u mention a comment they wont have impact the script it will show the message
+
+********
+#! /bin/bash
+
+#this is cat command   
+
+cat > txt.txt
+
+if u run the above script ntg going get a problem "if u mention #  in fornt line is going to converted as comment "
+
+## multiple line comment ##
+
+**********
+
+#! /bin/bash 
+:'
+thi is f 
+thi is f 
+thi is f 
+thi is f 
+thi is f 
+thi is f 
+thi is f ' 
+cat > text.txt
+
+:' if u mention like thi is going to get multie line comment ands with ' so in above script 
+:'
+thi is f 
+thi is f 
+thi is f 
+thi is f 
+thi is f 
+thi is f 
+thi is f ' this all are comments we can 1000 lines as comment by mention :' like this 
+
+**********
+
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+heredoc syntax 
+
+its very usefull if u want display any message on the script u have to use this 
+
+***********
+
+#! /bin/bash 
+
+cat << sudheer
+
+the matter should beb display on the 
+screen 
+
+sudheer
+
+***********
+
+output will be 
+		the matter should beb display on the 
+		screen 
+***********
+
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+
+CONDITIONAL STATEMENTS 
+
+IF STATEMENT 
+IFELSE STATMENT
+IFELSEIF STATMENT
+CONDITIONAL STATMENT
+
+##### if statement #####
+
+#! /bin/bash 
+
+count=10
+
+if [ $count -eq 8 ]
+
+then 
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+in above script in if condition if we use this type of [] we have to mention expression in letter format like this [ $count -eq 8 ]
+------------------------------------------------------------------
+
+****output will be ****
+
+the condition false
+
+$$$$ another way $$$$#! /bin/bash 
+
+count=10
+
+if (( $count < 12 ))
+
+then 
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+in above script in if condition if we use this type of ((   )) we have to mention expression in symbols like this (( $count < 8 ))
+
+########IFELSEIF STATMENT###############! /bin/bash 
+
+count=10
+
+if (( $count < 2 ))
+
+then 
+	echo "the condition is true"
+
+elif [ $count -eq 8 ]
+
+then
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+if u run this script first statment if (( $count < 2 )) is going excuted first if it is true output will be printed
+
+if  first condition fails then elif [ $count -eq 8 ] will excuted and output will be printed .
+
+----------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------- 
+
+###  && statement #####
+
+
+#! /bin/bash 
+
+count=10
+
+if (( $count <= 10 )) && (( $count > 5 ))
+
+then
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+if we excuted the above script we are getting some results if both true it will give output the condition is true other wise false 
+
+*** another way ***
+
+#! /bin/bash 
+
+count=10
+
+if (( $count <= 10  && $count > 5 ))
+
+then
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+*** another way ***
+
+#! /bin/bash 
+
+count=10
+
+if [ $count -eq 10  -a  $count -le 5 ]
+
+then
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+#########################if u want print the output if any one of the statament is correct then we have to use following statament ######## 
+
+#! /bin/bash 
+
+count=10
+
+if [ $count -eq 10  -o  $count -le 5 ]
+
+then
+ 	echo "the condition is true"
+else 
+	echo "the condition false"
+fi
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+
+####LOOPS####
+
+1.WHILE LOOPS
+2.UNTILL LOOPS
+3.FOR LOOPS
+4.BREAK AND CONTINUE STATAMENT 
+
+
+$$$$$$$$$$$$$$  While Loops $$$$$$$$$$$$$$
+
+#! /bin/bash 
+
+n=5
+
+read f 
+
+while (( n < f ))
+
+do 
+	echo "$n"
+	n=$((n+5))
+done 
+
+in above script we are using while loop in this loop the condition [ while (( n < f )) ] is saticified then is going excute the condition 
+n=$((n+5)) .
+
+******output will be****** 
+
+f=25
+then output will be 
+5
+10
+15
+20
+
+$$$$$$$$$$$$$$  untill Loops $$$$$$$$$$$$$$
+
+#! /bin/bash 
+n=5
+read f 
+
+until (( $n > f ))					in until loop we have to use { greaterthen > }
+
+do
+
+	echo $n
+
+	n=$(( n+1 ))
+
+done
+
+in above script we are using until loop in this loop the condition [ until (( n > f )) ] is saticified then is going excute the condition 
+n=$((n+1))
+
+***output*** 
+and the output will be 
+
+f = 10
+
+5
+6
+7
+8
+9
+10
+
+$$$$$ FOR LOOP $$$$$
+
+#! /bin/bash 
+
+for i in 1 2 3 4 5
+do
+echo $i
+done
+
+in for loop if u want print the i value as like that result will be 
+1
+2
+3
+4
+5
+
+#######################
+
+but in the above process there will be a problem to print 100 more number so we can use the expresssion like this {1..100}
+
+for i in {1..100}
+do
+echo $i
+done
+
+it will give the result like
+1
+2
+3
+4
+5 ...... 100
+
+######################
+
+but if u want print output like 20 to 20 like the following {1 21 41 61 81 } in between 100 we have to use following 
+
+#! /bin/bash 
+
+for i in {1..100..20}
+do
+echo $i
+done
+ 
+it will give the result like this 
+
+1
+21
+41
+61
+81
+
+###################### conventional for loop #########################
+
+#! /bin/bash 
+
+for (( i=20; i<50; i++ ))
+
+do
+echo $i
+done
+
+if we excute following script when the given condition is true (( i=20; i<50; i++ )) then it will print upto the condition staticified less then 50 i mean it prints numbers for 20 21 upto 49
+
+result will be 
+
+20 21 22 23 .......... 49
+
+##################### break the loop #################################
+
+#! /bin/bash 
+
+for (( i=20; i<50; i++ ))
+do
+	if (( $i > 35 ))
+
+then 
+	break
+fi
+	echo $i
+done
+
+in this we are using both for loop and if condition in this for loop condition stasified (( i=20; i<50; i++ )) then is to excute the if condition if (( $i > 35 )) and print the output upto if condition saticified and then its going to break
+
+output will be
+
+
+20 21 22 23 .......... 35
+
+##################### continue the loop #################################
+
+#! /bin/bash 
+
+for (( i=20; i<50; i++ ))
+do
+	if [ $i -eq 22 ] || [ $i -eq 35 ]
+
+then 
+	continue
+fi
+	echo $i
+done
+
+in this loop when the condition (( i=20; i<50; i++ )) is true then its going to check if condition then first condition is staticified
+ [ $i -eq 22 ] then wont print echo value its again go to the (( i=20; i<50; i++ )) and then it will excute the if condition [ $i -eq 35 ]
+and it will give result by skiping the value 35
+
+result will be
+
+20 21 23 24 25 26 27 28 29 30 31 32 33 34 36 37 38 39 40 41 42 43 44 45 46 47 48 49
+
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+
+*********SCRIPT INPUT************
+
+INSIDE HOW DO WE DEAL WITH $1 $2 $3 $4  
+
+#! /bin/bash 
+echo $1 $2 $3 $4
+
+when we run our script we have to give three inputs like
+
+when we run script in terminal { hello.sh sudheer radha vanitha subramanyam }
+
+&&&& the result will be &&&&
+
+sudheer radha vanitha subramanyam  
+
+
+#! /bin/bash
+
+
+args=("$@")
+
+echo ${args[0]} ${args[1]}
+
+echo $#
+
+when we run our script we have to give 2 inputs like
+
+when we run script in terminal { hello.sh  vanitha subramanyam }
+
+result will be 
+
+vanitha subramanyam
+
+2
+
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+
+$$$$$$$$$$ SCRIPT OUTPUT $$$$$$$$$$$$
+
+
+#! /bin/bash
+
+ls -al 1>file.txt 2>file.txttt
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+
+$$$$$$$$$$$$ pipes $$$$$$$$$$$$$$$$$$
+
+sending output from one script to another script and using both scripts to get output 
+
+#! /bin/bash
+
+MESSAGE=" hello "
+export MESSAGE 
+/home/sudheer/Desktop/filee.sh
+
+we have to mention the message what do u want to print output MESSAGE=" hello "
+
+and we have to export those MESSAGE to another script 
+
+and we have to mention the path of the another script /home/sudheer/Desktop/filee.sh
+
+##########
+
+and we have to creat a another script
+
+#! /bin/bash
+
+echo " the thindngfhbfa : $MESSAGE " 
+
+and we have to message 
+
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+
+$$$$$$$$ strings processing $$$$$$$$
+
+compareing string processs with two strings  
+
+#! /bin/bash
+
+echo " enter 1st string "
+read st1
+
+echo " enter 2nd string "
+read st2
+
+if [ $st1 == $st2 ]
+then 
+echo " strings are matched  "
+else
+echo " strings are not matched  "
+fi
+
+in the above strings we have mention two strings st1 and st2 we have check comparision both st1 & st2 equal are not are 
+
+resulat will be 
+ 
+##### if both are equal #####
+
+ enter 1st string 
+darling
+ enter 2nd string 
+darling
+ both are equal 
+
+##### if both are not equal #####
+
+ enter 1st string 
+12333
+ enter 2nd string 
+123
+ not eaqual
+
+^^^^^^^^^^^^^^^^^^ comparing both strings by using if and elif statement ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#! /bin/bash
+
+echo " enter the st1 value "
+
+read st1 
+
+echo " enter the st2 value "
+
+read st2
+
+if [ $st1 \< $st2 ]
+
+then 
+
+echo " st1 is lesser then st2 "
+
+elif [ $st1 \> $st2 ]
+
+then 
+
+echo " st1 is greterthen st2 "
+
+else 
+
+echo " both are equal "
+
+fi 
+
+in this script we are using three statements like this 
+ st1 is lesser then st2 "
+
+********** both equal **************
+
+ enter the st1 value 
+
+sudheer.
+
+ enter the st2 value
+ 
+sudheer.
+
+ both are equal 
+
+********** st1 is greaterthen st2 ************
+
+ enter the st1 value 
+
+222
+
+ enter the st2 value 
+
+2
+
+ st1 is greterthen st2 
+
+********** st1 is lessthen st2 ************
+
+ enter the st1 value 
+
+2
+
+ enter the st2 value 
+
+22
+
+ st1 is lesser then st2 
+
+########################################################################################
+
+^^^^^^^^^^ con contination ( in this both are connected each st1 and st2 ) ^^^^^^^^^^^^^
+
+#! /bin/bash
+
+echo " enter the st1 value "
+
+read st1 
+
+echo " enter the st2 value "
+
+read st2
+
+c=$st1$st2
+echo " $c "
+
+if u want print the both st1 and st2 together we have to use con contination c=$st1$st2 
+
+&&&&&&&& the result will be &&&&&&&&&
+
+ enter the st1 value 
+
+hello
+
+ enter the st2 value 
+
+world
+
+ helloworld
+
+##############################################################################################
+
+if u want to print the strings in upper case and lower case
+
+we have to use followed script 
+
+#! /bin/bash
+
+echo " enter the st1 value "
+
+read st1 
+
+echo " enter the st2 value "
+
+read st2
+
+echo ${st1^}
+
+echo ${st2^^}
+
+@@@@@@If U Want Print The Output Lowercase If It Is In Capital@@@@@@@
+
+ enter the st1 value 
+
+value should do
+
+ enter the st2 value 
+
+then capital
+
+Value should do
+
+THEN CAPITAL
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+^^^^^^^^^^^^^^^ numbers and arthimatic ^^^^^^^^^^^^^^^^^^^
+
+#! /bin/bash
+
+
+n1=220
+n2=215
+
+echo " $(( n1+n2 )) "
+echo " $(( n1-n2 )) "
+echo " $(( n1/n2 )) "
+echo " $(( n1*n2 )) "
+
+in another way  
+echo $(expr $n1 + $n2 )
+echo $(expr $n1 - $n2 )
+echo $(expr $n1 / $n2 )
+echo $(expr $n1 * $n2 )
+
+output will be  
+ 435 
+ 5 
+ 1 
+ 47300 
+
+============================ declare variable ======================================
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+declare -p
+
+#! /bin/bash
+
+declare -r pwdfile=/etc/passwd
+
+echo $pwdfile
+
+pwdfile=/etc/abc.txt
+
+echo " $pwdfile "
+
+declaring variable we can declare any variable 
+
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+
+^^^^^^^^^^^^^^ arrays ^^^^^^^^^^^^^^^^
+
+#! /bin/bash
+
+cars=( 'bmw' 'swift' )
+
+	unset cars[1]
+
+cars[1]='toyota'
+
+cars[2]='benz'
+
+cars[3]='orey'
+
+	echo "${cars[@]}"
+
+	echo "${!cars[@]}"
+	
+	echo "${#cars[@]}"
+	
+	echo "${cars[1]}"
+
+declaring arrays to add one data cars[1]='sudheer'
+
+to delete data from set unset cars[1]
+
+to know all the data avilable in array to see the echo "${cars[@]}"
+
+to know the index number echo "${!cars[@]}"
+
+to know the count of index avilable in array echo "${#cars[@]}"
+
+to want see particular index we have to use echo "${cars[1]}"
+
+
+################# the result will be ##################
+
+bmw toyota benz orey
+0 1 2 3
+4
+toyota
+
+$$$$$$$$$$$$$$$$$$ functions $$$$$$$$$$$$$$$$$$$$$$$
+
+functions are very usefull in shell scripting when we have to 60 lines of code 3 to 4 place u just use arrays it will copy all the data over ther lets see how it works 
+
+#! /bin/bash
+
+function funcname()
+{
+ echo "there will be no matter "
+}
+
+funcname
+
+echo " again "
+
+funcname 
+#######################
+
+if you use this we can print what are the output avilable in the function 
+
+^^^^^^^^ result will be ^^^^^^^^^^^^
+
+there will be no matter 
+
+again 
+
+there will be no matter
+
+----------------------------------------------------------------------------------------
+
+
+function funcprint()
+
+{
+
+echo $1 $2
+
+}
+
+funcprint bmw swift toyota
+
+if you want print the output with a variable we have to use this result will be
+
+bmw swift
+
+it means $1=bmw $2=swift
+
+-----------------------------------------------------------------------------------------
+
+function funccheck()
+{
+
+returningvalue=" use this function "
+
+echo " $returningvalue"
+
+}
+
+funccheck
+
+----------------------------------------------------------------------------------------
+
+&&&&&&&&&&&&&&&&&&&  files and directories &&&&&&&&&&&&&&&&&&
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
